@@ -17,7 +17,6 @@ random.Random(100).shuffle(XY)
 X,Y = zip(*XY)
 
 
-
 # B # 
 Xtrain=X[0:200]
 Ytrain=Y[0:200]
@@ -30,7 +29,7 @@ model.fit(Xtrain,Ytrain)
 Ypredict1=model.predict(Xtest)
 print(accuracy_score(Ytest,Ypredict1))
 
-# C # 
+# D # 
 clf = LinearDiscriminantAnalysis()
 clf.fit(Xtrain,Ytrain)
 Ypredict2=clf.predict(Xtest)
