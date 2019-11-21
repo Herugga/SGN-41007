@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Nov 11 13:43:46 2019
-
 @author: Mikko
 """
 
@@ -102,7 +101,4 @@ for i in range(len(Model)):
     model = Model[i]
     print(np.mean(cross_val_score(model,F, y, cv=5)))
     
-
-
-
 
