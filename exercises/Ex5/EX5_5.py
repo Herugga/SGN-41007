@@ -11,6 +11,7 @@ from tensorflow.keras.layers import Dense, Dropout, Flatten
 from tensorflow.keras.layers import Conv2D, MaxPooling2D
 from tensorflow.keras import backend as K
 import cv2
+import numpy as np
 
 batch_size = 128
 num_classes = 10
@@ -32,25 +33,19 @@ else:
     x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
     x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
     input_shape = (img_rows, img_cols, 1)
-    x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
-    x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
-    input_shape = (img_rows, img_cols, 1)
 
-x_train = tensorflow.image.grayscale_to_rgb(
-    tensorflow.convert_to_tensor(x_train)
-)
-x_train = tensorflow.image.resize(
-x_train,
-[128,128]
-)
-x_test = tensorflow.image.grayscale_to_rgb(
-tensorflow.convert_to_tensor(x_test)
-)
-x_test = tensorflow.image.resize(
-x_test,
-[128,128]
-)
 
+
+x_train = tensorflow.image.resize(x_train,[128,128])
+x_train = np.repeat(x_train,3,-1)
+
+x_test = tensorflow.image.resize(x_test,[128,128])
+x_test = np.repeat(x_test,3,-1)
+
+x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+x_train /= 255
+x_test /= 255
 
 print('x_train shape:', x_train.shape)
 print(x_train.shape[0], 'train samples')
@@ -82,11 +77,8 @@ model.compile(loss=tensorflow.keras.losses.categorical_crossentropy,
               metrics=['accuracy'])
 model.summary()
 
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=epochs,
-          verbose=1,
-          validation_data=(x_test, y_test))
+model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=2, validation_data=(x_test, y_test))
+
 score = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
